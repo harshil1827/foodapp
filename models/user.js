@@ -8,7 +8,8 @@ const userSchema = new mongoose.Schema({
     shopName: { 
         type: String, 
         required: function() { return this.role === 'owner'; } 
-      }
+      },
+      account: { type: Number, default: 0 }
 });
 
 const User = mongoose.model('User', userSchema);

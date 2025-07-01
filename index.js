@@ -4,16 +4,20 @@ app.use(express.json());
 const port  = 3000;
 
 const connectDB = require('./config/db');
-const homeRoutes = require('../backend/routes/home');
-const signupRoutes = require('./routes/signup')
-const loginRoutes = require('./routes/login')
 connectDB();
+
+const homeRoutes = require('../backend/routes/home');
+const signupRoutes = require('./routes/signup');
+const loginRoutes = require('./routes/login');
+const serviceRoutes = require('./routes/foods');
+
 
 app.use('/',homeRoutes);
 app.use('/signup',signupRoutes);
 app.use('/login',loginRoutes);
+app.use('/services', serviceRoutes);
 
 
 app.listen(port,()=>{
     console.log(`app is listneing on port ${port}`);
-})
+});
