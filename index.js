@@ -10,12 +10,14 @@ const homeRoutes = require('../backend/routes/home');
 const signupRoutes = require('./routes/signup');
 const loginRoutes = require('./routes/login');
 const serviceRoutes = require('./routes/foods');
+const orderRoutes = require('./routes/orders');
 
 
 app.use('/',homeRoutes);
 app.use('/signup',signupRoutes);
 app.use('/login',loginRoutes);
 app.use('/services', serviceRoutes);
+app.use('/orders',orderRoutes);
 
 
 app.listen(port,()=>{
