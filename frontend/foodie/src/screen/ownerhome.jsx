@@ -41,9 +41,14 @@ function OwnerHome() {
   // Submit food item to backend
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const ownerId = localStorage.getItem('userId');
 
     try {
-      await axios.post('http://localhost:4000/services/addfood', formData);
+      const payload = {
+        ...formData,
+        ownerId: ownerId,
+      };
+      await axios.post('http://localhost:4000/services/addfood',payload);
       fetchFoodList(); // Refresh list after successful addition
       setFormData({ name: '', description: '', price: '' });
     } catch (error) {
@@ -51,10 +56,11 @@ function OwnerHome() {
     }
   };
 
+  
+
   return (
     <div>
       <Navbar />
-      <h2 style={{ textAlign: 'center' }}>Owner Home</h2>
 
       <div style={{ display: 'flex', gap: '30px', padding: '20px' }}>
         {/* Form */}
@@ -104,7 +110,9 @@ function OwnerHome() {
             />
           </div>
 
-          <button type="submit" style={{ padding: '8px 16px' }}>Add to Shop</button>
+          <button type="submit" style={{ padding: '8px 16px' , backgroundColor:'green'}}>
+            Add to Shop
+          </button>
         </form>
 
         {/* Food List */}
@@ -125,7 +133,8 @@ function OwnerHome() {
                   }}>
                     <strong>{food.name}</strong><br />
                     <em>{food.description}</em><br />
-                    <span>Price: ₹{food.price}</span>
+                    <span>Price: ₹{food.price}</span><br/>
+                    <button style={{backgroundColor:'red'}} >delete</button>
                   </li>
                 ))}
             </ul>
