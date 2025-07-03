@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link , useNavigate} from 'react-router-dom';
 import axios from 'axios';
 
 function SignupCard() {
@@ -10,6 +10,8 @@ function SignupCard() {
     role: '',
     shopName: ''
   });
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,13 +32,15 @@ function SignupCard() {
     };
 
     if (formData.role === 'owner') {
-      payload.shopeName = formData.shopeName;
+      payload.shopName = formData.shopName;
     }
 
     try {
-      const response = await axios.post('http://localhost:4000/signup/',payload);
+      await axios.post('http://localhost:4000/signup/',payload);
       alert('Signup successful!');
-      console.log(response.data);
+      //console.log(response);
+      navigate('/');
+      
     } catch (error) {
       //console.error('Signup failed:', error);
       alert(
@@ -126,14 +130,14 @@ function SignupCard() {
           {/* Shop Name if Owner */}
           {formData.role === 'owner' && (
             <div>
-              <label htmlFor="shopeName" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+              <label htmlFor="shopName" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                 Shop Name
               </label>
               <input
                 type="text"
-                name="shopeName"
-                id="shopeName"
-                value={formData.shopeName}
+                name="shopName"
+                id="shopName"
+                value={formData.shopName}
                 onChange={handleChange}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 dark:bg-gray-600 dark:border-gray-500 dark:text-white"
                 placeholder="Your shop name"

@@ -32,7 +32,18 @@ function LoginCard() {
         navigate('/signup');
       }
       else{
-        navigate('/');
+        
+        console.log(response.data.data)
+        if(response.data.data.role === "owner"){
+          localStorage.setItem('userId',response.data.data._id);
+          localStorage.setItem('role',response.data.data.role);
+          navigate('/ownerhome');
+        }
+        else{
+          localStorage.setItem('userId',response.data.data._id);
+          localStorage.setItem('role',response.data.data.role);
+          navigate('/');
+        }
       }
 
       // Optional: redirect or store token, etc.
