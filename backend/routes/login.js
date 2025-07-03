@@ -7,7 +7,7 @@ router.post('/',async(req,res)=>{
     try {
         let user = await User.findOne({ email,password});
         if (user) {
-            return res.json({ msg: 'User logged In' });
+            return res.json({ msg: 'User logged In',data:user });
         }
         else{
             res.json("user not found");
