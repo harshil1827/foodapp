@@ -1,10 +1,14 @@
 const express = require("express")
 const app = express();
 app.use(express.json());
-const port  = 3000;
+const port  = 4000;
+const cors = require('cors');
 
 const connectDB = require('./config/db');
 connectDB();
+
+app.use(cors());
+
 
 const homeRoutes = require('../backend/routes/home');
 const signupRoutes = require('./routes/signup');
