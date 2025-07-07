@@ -22,6 +22,19 @@ function FoodList() {
     fetchMenuItems();
   }, [ownerId]);
 
+const handleorder = async(id)=>{
+  const constid = localStorage.getItem('userId');
+  const payload = {serviceId : id,
+                  customerId : constid,
+                  ownerId    : ownerId}; 
+  try {
+    const response = await axios.post(`http://localhost:4000/orders/`,payload);
+    console.log(response);
+    alert ("orderes succesfull");
+  } catch (error) {
+    console.log(error)
+  }
+}
   return (
     <>
       <Navbar />
@@ -34,6 +47,7 @@ function FoodList() {
                     <h1>{item.name}</h1>
                     <h1>{item.description}</h1>
                     <h1>{item.price}</h1>
+                    <button style={{backgroundColor:'grey' , borderRadius:'8px' }} onClick={()=>{handleorder(item._id)}}>order</button>
                 </div>
             ))
           ) : (

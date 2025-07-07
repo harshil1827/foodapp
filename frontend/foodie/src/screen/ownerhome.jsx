@@ -3,6 +3,19 @@ import axios from 'axios'; // You need to install axios if you haven't
 import Navbar from '../components/navbar';
 
 function OwnerHome() {
+
+  const [orders, setOrders] = useState([]);
+
+  const fetchOrders = async () => {
+    try {
+      const response = await axios.get(`http://localhost:4000/orders?ownerId=${ownerId}`);
+      console.log(response.data);
+      setOrders(response.data);
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+    }
+  };
+
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -27,6 +40,7 @@ function OwnerHome() {
 
   useEffect(() => {
     fetchFoodList();
+    fetchOrders();
   },[]);
 
   // Handle form input changes
@@ -56,6 +70,16 @@ function OwnerHome() {
     }
   };
 
+  const handledelete = async(id)=>{
+    console.log(id);
+    try {
+      const response = await axios.delete(`http://localhost:4000/services/deletefood?id=${id}`);
+      fetchFoodList(); 
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  }
   
 
   return (
@@ -63,8 +87,8 @@ function OwnerHome() {
       <Navbar />
 
       <div style={{ display: 'flex', gap: '30px', padding: '20px' }}>
-        {/* Form */}
-        <form
+  {/* Form (Left) */}
+  <form
           onSubmit={handleSubmit}
           style={{
             border: '1px solid #ccc',
@@ -115,33 +139,62 @@ function OwnerHome() {
           </button>
         </form>
 
-        {/* Food List */}
-        <div>
-          <h3>Food List</h3>
-          {Array.isArray(foodList) && foodList.length === 0 ? (
-            <p>No food items added yet.</p>
-          ) : (
-            <ul style={{ listStyle: 'none', padding: 0 }}>
-              {Array.isArray(foodList) &&
-                foodList.map((food, index) => (
-                  <li key={index} style={{
-                    border: '1px solid #ddd',
-                    borderRadius: '6px',
-                    padding: '10px',
-                    marginBottom: '10px',
-                    backgroundColor: '#fff',
-                  }}>
-                    <strong>{food.name}</strong><br />
-                    <em>{food.description}</em><br />
-                    <span>Price: ₹{food.price}</span><br/>
-                    <button style={{backgroundColor:'red'}} >delete</button>
-                  </li>
-                ))}
-            </ul>
-          )}
-        </div>
+  {/* Food List (Center) */}
+  <div>
+    <h3>Food List</h3>
+    {Array.isArray(foodList) && foodList.length === 0 ? (
+      <p>No food items added yet.</p>
+    ) : (
+      <ul style={{ listStyle: 'none', padding: 0 }}>
+        {foodList.map((food, index) => (
+          <li key={index} style={{
+            border: '1px solid #ddd',
+            borderRadius: '6px',
+            padding: '10px',
+            marginBottom: '10px',
+            backgroundColor: '#fff',
+          }}>
+            <strong>{food.name}</strong><br />
+            <em>{food.description}</em><br />
+            <span>Price: ₹{food.price}</span><br />
+            <button style={{ backgroundColor: 'red' }} onClick={() => handledelete(food._id)}>delete</button>
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
 
-      </div>
+  {/* Orders (Right Side) */}
+  <div style={{
+    width: '300px',
+    border: '1px solid #ccc',
+    borderRadius: '8px',
+    padding: '20px',
+    backgroundColor: '#f1f1f1',
+  }}>
+    <h3>Orders Received</h3>
+    {orders.length === 0 ? (
+      <p>No orders received yet.</p>
+    ) : (
+      <ul style={{ listStyle: 'none', padding: 0 }}>
+        {orders.map((order, index) => (
+          <li key={index} style={{
+            marginBottom: '10px',
+            padding: '10px',
+            backgroundColor: '#fff',
+            border: '1px solid #ddd',
+            borderRadius: '6px',
+          }}>
+            <strong>Customer:</strong> {order.customerId.name} <br />
+            <strong>Item:</strong> {order.serviceId.name} <br />
+            <strong>Status:</strong> {order.status}
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
+</div>
+
     </div>
   );
 }
